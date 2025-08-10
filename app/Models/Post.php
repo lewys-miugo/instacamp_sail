@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
+
+class Post extends Model
+{
+    //
+
+    protected $connection = 'mongodb';
+
+    protected $table = 'posts';
+
+    protected $fillable = [
+        'caption',
+        'image_path',
+        'image_url',
+        'user_id',
+    ];
+
+    // Relationships
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(related: Comment::class);
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(related: Like::class);
+    }
+
+    
+}
