@@ -70,10 +70,15 @@ DB_PORT=27017
 DB_DATABASE=instacamp
 DB_USERNAME=
 DB_PASSWORD=
+
+SESSION_CONNECTION=mongodb
+
+CACHE_STORE=mongodb
+
 ```
 NB: `DB_HOST=mongodb` should match the service name in `docker-compose.yml` .
 
-# 6. Configure `config/database.php`
+# 6. Configure `config/database.php` & `config/cache.php`
 inside your `config/database.php` add this to the `connections` array:
 ```php
 'mongodb' => [
@@ -88,8 +93,28 @@ inside your `config/database.php` add this to the `connections` array:
     ],
 ],
 ```
-# 7. Restart Sail
+inside you `config/cache.php` add this in the `stores` array:
+```php
+'mongodb' => [
+    'driver' => 'mongodb',
+    'connection' => 'mongodb',
+    'collection' => 'cache',
+    'lock_connection' => 'mongodb',
+    'lock_collection' => 'cache_locks',
+    'lock_lottery' => [2,100],
+    'lock_timeout'=> 86400,
+],
+```
+
+# 7. Register MongoDB in `bootstarp/providers.php`.
+Add the following line inside return array:
+```php
+MongoDB\Laravel\MongoDBServiceProvider::class,
+```
+The above guides laravel to use/talk to MongoDB
+# 8. Restart Sail
 ```bash
 ./vendor/bin/sail down && ./vendor/bin/sail up -d
 ```
- 
+# 9. Code Along
+Now you can proceed to code along with beau from minute 11 [here](https://youtu.be/VK-2j5CNsvM?si=SR-kJnoIc5p3kplv) Happy coding!!
